@@ -11,10 +11,12 @@ namespace EmployeeManagement.Controllers
     public class CompaniesController : Controller
     {
         private readonly ICompanyRepository _compRepo;
+        private readonly IAdvancedRepository _adRepo;
 
-        public CompaniesController(ICompanyRepository compRepo)
+        public CompaniesController(ICompanyRepository compRepo, IAdvancedRepository adRepo)
         {
             _compRepo = compRepo;
+            _adRepo = adRepo;
         }
 
         // GET: Companies
@@ -30,11 +32,13 @@ namespace EmployeeManagement.Controllers
                 return NotFound();
             }
 
-            var company = _compRepo.Find(id.GetValueOrDefault());
-            if (company == null)
-            {
-                return NotFound();
-            }
+            //var company = _compRepo.Find(id.GetValueOrDefault());
+            //if (company == null)
+            //{
+            //    return NotFound();
+            //}
+
+           var company = _adRepo.GetCompanyWithAddress(id.GetValueOrDefault()); // with one to many relationship
 
             return View(company);
         }

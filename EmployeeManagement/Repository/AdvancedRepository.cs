@@ -19,6 +19,26 @@ namespace EmployeeManagement.Repository
             db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
+        public Company GetCompanyWithAddress(int id)
+        {
+            var p = new
+            {
+                CompanyId = id
+            };
+
+            var sql = "Select * From Companies Where CompanyId = @CompanyId;" +
+                      " Select * From Employees Where CompanyId = @CompanyId;";
+            Company company;
+
+            using (var lists = db.QueryMultiple(sql, p))
+            {
+                company = lists.Read<Company>().ToList().FirstOrDefault();
+                company.Employees = lists.Read<Employee>().ToList();
+            }
+
+            return company;
+        }
+
         public List<Employee> GetEmployeeWithCompany(int id)
         {
             var sql = "select E.*,C.* from Employees AS E Inner join Companies AS C On E.CompanyId = C.CompanyId";
