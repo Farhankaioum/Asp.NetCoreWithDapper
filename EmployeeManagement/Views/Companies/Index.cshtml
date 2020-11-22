@@ -49,7 +49,7 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.CompanyId" class="btn btn-info">Edit</a>
                     <a asp-action="Details" asp-route-id="@item.CompanyId" class="btn btn-success">Details</a>
-                    <a asp-action="Delete" asp-route-id="@item.CompanyId" class="btn btn-danger">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@item.CompanyId" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a>
                 </td>
                 <td>
                     <a asp-action="Index" asp-controller="Employees" asp-route-companyId="@item.CompanyId" class="btn btn-primary">Manage Employees</a>

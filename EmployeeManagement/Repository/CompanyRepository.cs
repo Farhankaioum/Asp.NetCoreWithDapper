@@ -1,7 +1,11 @@
-﻿using EmployeeManagement.Data;
+﻿using Dapper;
+using EmployeeManagement.Data;
 using EmployeeManagement.Models;
+using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,51 +13,58 @@ namespace EmployeeManagement.Repository
 {
     public class CompanyRepository : ICompanyRepository
     {
-        private readonly AppDbContext _context;
+        private IDbConnection db;
 
-        public CompanyRepository(AppDbContext context)
+        public CompanyRepository(IConfiguration configuration)
         {
-            _context = context;
+            db = new SqlConnection(configuration.GetConnectionString("DefaultConnection"));
         }
 
         public Company Add(Company company)
         {
-            _context.Companies.Add(company);
-            _context.SaveChanges();
+            var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);SELECT CAST(SCOPE_IDENTITY() as int); ";
+            var insertedId = db.Query<int>(sql, new 
+              { 
+                @Name = company.Name,
+                @Address = company.Address,
+                @City = company.City,
+                @State = company.State,
+                @PostalCode = company.PostalCode
+            }).FirstOrDefault();
+
+            //db.Query<int>(sql, company); // another way to execute query
+
+            company.CompanyId = insertedId;
 
             return company;
         }
 
         public Company Find(int id)
         {
-            var existingCompany = _context.Companies.FirstOrDefault(c => c.CompanyId == id);
-            return existingCompany;
+            var sql = "select * from Companies where CompanyId = @CompanyId";
+            var company = db.Query<Company>(sql, new { @CompanyId =id}).FirstOrDefault();
+
+            return company;
         }
 
         public List<Company> GetAll()
         {
-            var companies = _context.Companies.ToList();
-            return companies;
+            var sql = "select * from Companies";
+            var allCompanies = db.Query<Company>(sql).ToList();
+
+            return allCompanies;
         }
 
         public void Remove(int id)
         {
-            var existingCompany = Find(id);
-
-            _context.Remove(existingCompany);
-            _context.SaveChanges();
+            var sql = "DELETE FROM Companies WHERE CompanyId = @Id";
+            db.Execute(sql, new { @Id = id});
         }
 
         public Company Update(Company company)
         {
-            var existingCompany = Find(company.CompanyId);
-            existingCompany.Name = company.Name;
-            existingCompany.Address = company.Address;
-            existingCompany.City = company.City;
-            existingCompany.State = company.State;
-            existingCompany.PostalCode = company.PostalCode;
-
-            _context.SaveChanges();
+            var sql = "UPDATE Companies SET Name = @Name, Address = @Address, City = @City, State = @State, PostalCode = @PostalCode WHERE CompanyId = @CompanyId";
+            db.Execute(sql, company);
 
             return company;
         }
