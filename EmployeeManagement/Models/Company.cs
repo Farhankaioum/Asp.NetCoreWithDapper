@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using Dapper.Contrib.Extensions;
+using System.Collections.Generic;
 
 namespace EmployeeManagement.Models
 {
+    [Table("Companies")]
     public class Company
     {
         [Key]
@@ -18,6 +19,7 @@ namespace EmployeeManagement.Models
 
         public string PostalCode { get; set; }
 
+        [Write(false)]
         public virtual ICollection<Employee> Employees { get; set; }
     }
 }

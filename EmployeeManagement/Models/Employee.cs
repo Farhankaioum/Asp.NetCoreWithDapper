@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Dapper.Contrib.Extensions;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace EmployeeManagement.Models
 {
+    [Dapper.Contrib.Extensions.Table("Employees")]
     public class Employee
     {
         [Key]
@@ -18,6 +19,7 @@ namespace EmployeeManagement.Models
 
         public int CompanyId { get; set; }
         [ForeignKey("CompanyId")]
+        [Write(false)]
         public virtual Company Company { get; set; }
     }
 }
