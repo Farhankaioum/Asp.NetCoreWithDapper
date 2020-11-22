@@ -55,7 +55,7 @@ namespace EmployeeManagement.Controllers
                 Title = "Test Manager 2"
             });
 
-            _adRepo.AddTestCompanyWithEmployee(company);
+            _adRepo.AddTestCompanyWithEmployeesWithTransaction(company);
 
             return RedirectToAction(nameof(Index));
         }

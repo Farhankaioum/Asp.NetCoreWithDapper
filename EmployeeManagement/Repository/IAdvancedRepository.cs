@@ -19,5 +19,7 @@ namespace EmployeeManagement.Repository
         void RemoveRange(int[] companyId);
 
         List<Company> FilterCompanyByName(string name);
+
+        void AddTestCompanyWithEmployeesWithTransaction(Company objComp);
     }
 }

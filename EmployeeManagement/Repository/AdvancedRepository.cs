@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Transactions;
 
 namespace EmployeeManagement.Repository
 {
@@ -100,6 +101,36 @@ namespace EmployeeManagement.Repository
             var sqlEmp = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);" +
                       "SELECT CAST(SCOPE_IDENTITY() as int);";
             db.Execute(sqlEmp, objComp.Employees);
+        }
+
+        public void AddTestCompanyWithEmployeesWithTransaction(Company objComp)
+        {
+            using (var tranction = new TransactionScope())
+            {
+                try
+                {
+                    var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);" +
+                        "SELECT CAST(SCOPE_IDENTITY() as int); ";
+
+                    var id = db.Query<int>(sql, objComp).Single();
+                    objComp.CompanyId = id;
+
+                    objComp.Employees.Select(c => { c.CompanyId = id; return c; }).ToList(); // set CompanyId in each employee
+
+                    var sqlEmp = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);" +
+                              "SELECT CAST(SCOPE_IDENTITY() as int);";
+
+                    db.Execute(sqlEmp, objComp.Employees);
+
+                    tranction.Complete();
+                }
+                catch
+                {
+                    tranction.Dispose();
+                }
+            }
+
+            
         }
 
         public void RemoveRange(int[] companyId)
