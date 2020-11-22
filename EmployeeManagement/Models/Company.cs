@@ -6,6 +6,11 @@ namespace EmployeeManagement.Models
     [Table("Companies")]
     public class Company
     {
+        public Company()
+        {
+            Employees = new List<Employee>();
+        }
+
         [Key]
         public int CompanyId { get; set; }
 

@@ -1,4 +1,5 @@
 ﻿using EmployeeManagement.Models;
+using EmployeeManagement.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,15 +13,18 @@ namespace EmployeeManagement.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAdvancedRepository _adRepo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IAdvancedRepository adRepo)
         {
             _logger = logger;
+            _adRepo = adRepo;
         }
 
         public IActionResult Index()
         {
-            return View();
+            var company = _adRepo.GetAllCompanyWithEmployees();
+            return View(company);
         }
 
         public IActionResult Privacy()

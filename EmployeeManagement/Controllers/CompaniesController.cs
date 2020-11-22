@@ -38,7 +38,7 @@ namespace EmployeeManagement.Controllers
             //    return NotFound();
             //}
 
-           var company = _adRepo.GetCompanyWithAddress(id.GetValueOrDefault()); // with one to many relationship
+           var company = _adRepo.GetCompanyWithEmployees(id.GetValueOrDefault()); // with one to many relationship
 
             return View(company);
         }

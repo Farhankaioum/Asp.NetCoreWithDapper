@@ -9,6 +9,9 @@ namespace EmployeeManagement.Repository
     public interface IAdvancedRepository
     {
         List<Employee> GetEmployeeWithCompany(int id);
-        Company GetCompanyWithAddress(int id);
+
+        Company GetCompanyWithEmployees(int id);
+
+        List<Company> GetAllCompanyWithEmployees();
     }
 }
