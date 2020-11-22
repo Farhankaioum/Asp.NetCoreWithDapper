@@ -15,5 +15,9 @@ namespace EmployeeManagement.Repository
         List<Company> GetAllCompanyWithEmployees();
 
         void AddTestCompanyWithEmployee(Company objComp);
+
+        void RemoveRange(int[] companyId);
+
+        List<Company> FilterCompanyByName(string name);
     }
 }

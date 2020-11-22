@@ -95,5 +95,15 @@ namespace EmployeeManagement.Repository
                 db.Query<int>(sql1, employee).Single();
             }
         }
+
+        public void RemoveRange(int[] companyId)
+        {
+            db.Query("Delete From Companies Where CompanyId In @companyId", new { companyId });
+        }
+
+        public List<Company> FilterCompanyByName(string name)
+        {
+            return db.Query<Company>("Select * From Companies Where Name like '%' + @name + '%'", new { name = name}).ToList();
+        }
     }
 }

@@ -62,7 +62,10 @@ namespace EmployeeManagement.Controllers
 
         public IActionResult RemoveTestRecords()
         {
-            return View();
+            var companyIdToRemove = _adRepo.FilterCompanyByName("Test").Select(i => i.CompanyId).ToArray();
+            _adRepo.RemoveRange(companyIdToRemove);
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()
