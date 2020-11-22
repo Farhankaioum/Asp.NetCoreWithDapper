@@ -31,6 +31,7 @@ namespace EmployeeManagement
 
             // registering services
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             services.AddControllersWithViews();
         }

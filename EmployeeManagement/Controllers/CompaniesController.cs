@@ -70,6 +70,8 @@ namespace EmployeeManagement.Controllers
             {
                 return NotFound();
             }
+           
+
             return View(company);
         }
 
