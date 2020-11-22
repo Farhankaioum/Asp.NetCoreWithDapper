@@ -51,7 +51,7 @@
                 <a asp-action="Delete" asp-route-id="@item.CompanyId" onclick="return confirm('Are you sure?')" class="btn btn-danger">Delete</a>
             </td>
             <td>
-                <a asp-action="Index" asp-controller="Employees" asp-route-companyId="@item.CompanyId" class="btn btn-primary">Manage Employees</a>
+                <a asp-action="Index" asp-controller="Employee" asp-route-companyId="@item.CompanyId" class="btn btn-primary">Manage Employees</a>
             </td>
         </tr>
 }

@@ -2,7 +2,6 @@
 using EmployeeManagement.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,17 +12,26 @@ namespace EmployeeManagement.Controllers
     {
         private readonly IEmployeeRepository _repository;
         private readonly ICompanyRepository _companyRepo;
+        private readonly IAdvancedRepository _adRepo;
 
-        public EmployeeController(IEmployeeRepository repository, ICompanyRepository companyRepo)
+        public EmployeeController(IEmployeeRepository repository, ICompanyRepository companyRepo, IAdvancedRepository adRepo)
         {
             _repository = repository;
             _companyRepo = companyRepo;
+            _adRepo = adRepo;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(int companyId=0)
         {
-            var allEmployee = _repository.GetAll();
-            return View(allEmployee);
+            //var allEmployee = _repository.GetAll();
+            //foreach (var emp in allEmployee) // n+1 way to iterate/mapping two relational table
+            //{
+            //    emp.Company = _companyRepo.Find(emp.CompanyId);
+            //}
+            //return View(allEmployee);
+
+            var employee = _adRepo.GetEmployeeWithCompany(companyId);
+            return View(employee);
         }
 
         [HttpGet]
