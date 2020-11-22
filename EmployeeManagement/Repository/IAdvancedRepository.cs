@@ -8,10 +8,12 @@ namespace EmployeeManagement.Repository
 {
     public interface IAdvancedRepository
     {
-        List<Employee> GetEmployeeWithCompany(int id);
+        List<Employee> GetAllEmployeeWithCompany(int id);
 
         Company GetCompanyWithEmployees(int id);
 
         List<Company> GetAllCompanyWithEmployees();
+
+        void AddTestCompanyWithEmployee(Company objComp);
     }
 }

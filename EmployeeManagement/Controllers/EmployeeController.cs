@@ -30,7 +30,7 @@ namespace EmployeeManagement.Controllers
             //}
             //return View(allEmployee);
 
-            var employee = _adRepo.GetEmployeeWithCompany(companyId);
+            var employee = _adRepo.GetAllEmployeeWithCompany(companyId);
             return View(employee);
         }
 

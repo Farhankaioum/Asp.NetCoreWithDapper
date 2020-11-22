@@ -27,6 +27,44 @@ namespace EmployeeManagement.Controllers
             return View(company);
         }
 
+        public IActionResult AddTestRecords()
+        {
+            Company company = new Company()
+            {
+                Name = "Test" + Guid.NewGuid().ToString(),
+                Address = "test address",
+                City = "test city",
+                PostalCode = "test postalCode",
+                State = "test state",
+                Employees = new List<Employee>()
+            };
+
+            company.Employees.Add(new Employee()
+            {
+                Email = "test Email",
+                Name = "Test Name " + Guid.NewGuid().ToString(),
+                Phone = " test phone",
+                Title = "Test Manager"
+            });
+
+            company.Employees.Add(new Employee()
+            {
+                Email = "test Email 2",
+                Name = "Test Name 2" + Guid.NewGuid().ToString(),
+                Phone = " test phone 2",
+                Title = "Test Manager 2"
+            });
+
+            _adRepo.AddTestCompanyWithEmployee(company);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult RemoveTestRecords()
+        {
+            return View();
+        }
+
         public IActionResult Privacy()
         {
             return View();

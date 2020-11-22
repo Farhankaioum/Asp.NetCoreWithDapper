@@ -59,7 +59,7 @@ namespace EmployeeManagement.Repository
             return company;
         }
 
-        public List<Employee> GetEmployeeWithCompany(int id)
+        public List<Employee> GetAllEmployeeWithCompany(int id)
         {
             var sql = "select E.*,C.* from Employees AS E Inner join Companies AS C On E.CompanyId = C.CompanyId";
 
@@ -75,6 +75,25 @@ namespace EmployeeManagement.Repository
             }, new { id }, splitOn: "CompanyId");
 
             return employee.ToList();
+        }
+
+        public void AddTestCompanyWithEmployee(Company objComp)
+        {
+            var sql = "INSERT INTO Companies (Name, Address, City, State, PostalCode) VALUES(@Name, @Address, @City, @State, @PostalCode);" +
+                        "SELECT CAST(SCOPE_IDENTITY() as int); ";
+
+            var id = db.Query<int>(sql, objComp).Single();
+
+            objComp.CompanyId = id;
+
+            foreach (var employee in objComp.Employees)
+            {
+                employee.CompanyId = objComp.CompanyId;
+                var sql1 = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);" +
+                        "SELECT CAST(SCOPE_IDENTITY() as int);";
+
+                db.Query<int>(sql1, employee).Single();
+            }
         }
     }
 }
