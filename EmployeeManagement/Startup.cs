@@ -1,4 +1,5 @@
 using EmployeeManagement.Data;
+using EmployeeManagement.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,8 +26,11 @@ namespace EmployeeManagement
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => {
-                options.UseSqlServer(Configuration.GetConnectionString(""));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            // registering services
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
 
             services.AddControllersWithViews();
         }
@@ -53,7 +57,7 @@ namespace EmployeeManagement
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Companies}/{action=Index}/{id?}");
             });
         }
     }
