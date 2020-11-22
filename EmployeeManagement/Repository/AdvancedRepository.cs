@@ -86,14 +86,20 @@ namespace EmployeeManagement.Repository
 
             objComp.CompanyId = id;
 
-            foreach (var employee in objComp.Employees)
-            {
-                employee.CompanyId = objComp.CompanyId;
-                var sql1 = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);" +
-                        "SELECT CAST(SCOPE_IDENTITY() as int);";
+            //foreach (var employee in objComp.Employees)
+            //{
+            //    employee.CompanyId = objComp.CompanyId;
+            //    var sql1 = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);" +
+            //            "SELECT CAST(SCOPE_IDENTITY() as int);";
 
-                db.Query<int>(sql1, employee).Single();
-            }
+            //    db.Query<int>(sql1, employee).Single();
+            //} // one way to insert navigation property
+
+            // another way to insert navigation property
+            objComp.Employees.Select(c => { c.CompanyId = id; return c; }).ToList();
+            var sqlEmp = "INSERT INTO Employees (Name, Title, Email, Phone, CompanyId) VALUES(@Name, @Title, @Email, @Phone, @CompanyId);" +
+                      "SELECT CAST(SCOPE_IDENTITY() as int);";
+            db.Execute(sqlEmp, objComp.Employees);
         }
 
         public void RemoveRange(int[] companyId)
